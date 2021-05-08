@@ -45,6 +45,7 @@ public class FPSController : PortalTraveller {
     void Start ()
     {
         pv = GetComponent<PhotonView>();
+        Cursor.lockState = CursorLockMode.Locked;
         
         cam = Camera.main;
         if (lockCursor) {
@@ -66,16 +67,13 @@ public class FPSController : PortalTraveller {
     }
 
     void Update () {
-        // if (Input.GetKeyDown (KeyCode.P)) {
-        //     Cursor.lockState = CursorLockMode.None;
-        //     Cursor.visible = true;
-        //     Debug.Break ();
-        // }
-        // if (Input.GetKeyDown (KeyCode.O))
-        // {
-        //     FindObjectOfType<PortalManager>().SetUpPortals();
-        // }
-        
+        if (Input.GetKeyDown (KeyCode.P)) {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+            Debug.Break ();
+        }
+
+
         if (!pv.IsMine)
         {
             if (!notMine)
@@ -93,6 +91,19 @@ public class FPSController : PortalTraveller {
 
         Move();
         Look();
+        
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+            if (Physics.Raycast(ray, out hit, 2f)) {
+                if (hit.transform.gameObject.GetComponent<IInteractable>() != null)
+                {
+                    hit.transform.gameObject.GetComponent<IInteractable>().Interact();
+                }
+            }
+        }
     }
 
     private void Move()
