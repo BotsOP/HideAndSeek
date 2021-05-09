@@ -7,11 +7,12 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
 
-public class RoomManager : MonoBehaviourPunCallbacks
+public class RoomManager : MonoBehaviourPunCallbacks, IPunObservable
 {
     public static RoomManager Instance;
-    public GameObject[] allCharacters;
     public int selectedCharacter;
+    public int time;
+    private bool inGame;
     private void Awake()
     {
         if (Instance)
@@ -56,8 +57,31 @@ public class RoomManager : MonoBehaviourPunCallbacks
         Debug.Log("test");
         if (scene.buildIndex == 1)
         {
-            Debug.Log("test2");
+            time = (int)Time.time;
+            inGame = true;
             PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
+        }
+    }
+
+    private void Update()
+    {
+        if (PhotonNetwork.IsMasterClient)
+        {
+            time = (int)Time.time;
+        }
+        Debug.Log(time);
+    }
+    
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+        Debug.Log("Streaming");
+        if (stream.IsWriting && PhotonNetwork.IsMasterClient && inGame)
+        {
+            stream.SendNext(time);
+        }
+        else if (stream.IsReading && !PhotonNetwork.IsMasterClient && inGame)
+        {
+            time = (int)stream.ReceiveNext();
         }
     }
 }
