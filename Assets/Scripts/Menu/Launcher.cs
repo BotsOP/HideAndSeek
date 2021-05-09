@@ -42,6 +42,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         Debug.Log("Connected to master");
         PhotonNetwork.NickName = "Player " + Random.Range(0, 1000).ToString("0000");
         displayNickname.text = "Nickname: " + PhotonNetwork.NickName;
+        playerCustomProperties["Team"] = 0;
+        PhotonNetwork.SetPlayerCustomProperties(playerCustomProperties);
         PhotonNetwork.JoinLobby();
         PhotonNetwork.AutomaticallySyncScene = true;
     }

@@ -28,7 +28,8 @@ public class RoomManager : MonoBehaviourPunCallbacks
         if (PlayerPrefs.HasKey("MyCharacter"))
         {
             Debug.Log("Already has mycharacter pref");
-            selectedCharacter = PlayerPrefs.GetInt("MyCharacter");
+            selectedCharacter = 0;
+            PlayerPrefs.SetInt("MyCharacter", selectedCharacter);
         }
         else
         {

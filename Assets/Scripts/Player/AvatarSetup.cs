@@ -6,21 +6,30 @@ using Photon.Pun;
 public class AvatarSetup : MonoBehaviour
 {
     private PhotonView pv;
-    public int characterValue;
     public GameObject myCharacter;
-    void Start()
+    void Awake()
     {
         pv = GetComponent<PhotonView>();
         if (pv.IsMine)
         {
             pv.RPC("RPC_AddCharacter", RpcTarget.AllBuffered, RoomManager.Instance.selectedCharacter);
+            myCharacter.layer = 6;
         }
     }
 
     [PunRPC]
     void RPC_AddCharacter(int whichCharacter)
     {
-        characterValue = whichCharacter;
-        myCharacter = Instantiate(RoomManager.Instance.allCharacters[whichCharacter], transform.position, transform.rotation, transform);
+        if(whichCharacter == 0)
+        {
+            myCharacter = transform.GetChild(8).gameObject;
+            myCharacter.SetActive(true);
+        }
+        else
+        {
+            myCharacter = transform.GetChild(5).gameObject;
+            FindObjectOfType<FPSController>().isSeeker = true;
+            myCharacter.SetActive(true);
+        }
     }
 }

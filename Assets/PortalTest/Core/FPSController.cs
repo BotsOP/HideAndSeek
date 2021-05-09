@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public class FPSController : PortalTraveller {
+public class FPSController : PortalTraveller, IDamagable {
 
     public float walkSpeed = 3;
     public float runSpeed = 6;
@@ -13,11 +13,14 @@ public class FPSController : PortalTraveller {
     public float gravity = 18;
     public Animator animator;
     public GameObject avatar;
+    public float maxHealth;
+    private float currenthealth;
 
     public bool lockCursor;
     public float mouseSensitivity = 10;
     public Vector2 pitchMinMax = new Vector2 (-40, 85);
     public float rotationSmoothTime = 0.1f;
+    public bool isSeeker = false;
 
     CharacterController controller;
     Camera cam;
@@ -39,12 +42,30 @@ public class FPSController : PortalTraveller {
     bool disabled;
     private bool isCrouching;
     private bool notMine;
+    float fireRate = 0.9f;
+    float nextFire;
 
+
+    PlayerManager playerManager;
     private PhotonView pv;
 
     void Start ()
     {
         pv = GetComponent<PhotonView>();
+        playerManager = PhotonView.Find((int)pv.InstantiationData[0]).GetComponent<PlayerManager>();
+
+        if(!pv.IsMine)
+        {
+            Destroy(GetComponent<CharacterController>());
+            CapsuleCollider cc = gameObject.AddComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+            cc.height = 1.85f;
+            cc.center = new Vector3(0, -0.1f, 0);
+            notMine = true;
+            return;
+        }
+
+        Camera.main.transform.SetParent(transform);
+        Camera.main.transform.localPosition = new Vector3(0, 0.662f, 0);
         Cursor.lockState = CursorLockMode.Locked;
         
         cam = Camera.main;
@@ -60,10 +81,13 @@ public class FPSController : PortalTraveller {
         smoothYaw = yaw;
         smoothPitch = pitch;
 
-        if (pv.IsMine)
+        if(isSeeker)
         {
-            avatar.layer = 6;
+            maxHealth = 99999;
+            runSpeed = 10;
         }
+
+        currenthealth = maxHealth;
     }
 
     void Update () {
@@ -73,15 +97,8 @@ public class FPSController : PortalTraveller {
             Debug.Break ();
         }
 
-
         if (!pv.IsMine)
         {
-            if (!notMine)
-            {
-                Destroy(GetComponentInChildren<Camera>().gameObject);
-                Destroy(GetComponent<CharacterController>());
-                notMine = true;
-            }
             return;
         }
 
@@ -91,19 +108,18 @@ public class FPSController : PortalTraveller {
 
         Move();
         Look();
-        
-        if (Input.GetKeyDown(KeyCode.E))
+        Interact();
+        if(isSeeker)
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        
-            if (Physics.Raycast(ray, out hit, 2f)) {
-                if (hit.transform.gameObject.GetComponent<IInteractable>() != null)
-                {
-                    hit.transform.gameObject.GetComponent<IInteractable>().Interact();
-                }
-            }
+            Shoot();
         }
+    }
+
+    private IEnumerator Punch()
+    {
+        animator.SetBool("isPunching", true);
+        yield return new WaitForSeconds(0.85f);
+        animator.SetBool("isPunching", false);
     }
 
     private void Move()
@@ -195,6 +211,38 @@ public class FPSController : PortalTraveller {
         cam.transform.localEulerAngles = Vector3.right * smoothPitch;
     }
 
+    private void Shoot()
+    {
+        if(Input.GetMouseButton(0) && Time.time > nextFire)
+        {        
+            nextFire = Time.time + fireRate;
+            StartCoroutine("Punch");
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit, 2f)) 
+            {
+                hit.transform.gameObject.GetComponent<IDamagable>()?.TakeDamage(30);
+            }
+        }
+    }
+
+    private void Interact()
+    {
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        
+            int layerMask = 1 << 7;
+            if (Physics.Raycast(ray, out hit, 2f, layerMask)) {
+                if (hit.transform.gameObject.GetComponent<IInteractable>() != null)
+                {
+                    hit.transform.gameObject.GetComponent<IInteractable>().Interact();
+                }
+            }
+        }
+    }
+
     public override void Teleport (Transform fromPortal, Transform toPortal, Vector3 pos, Quaternion rot) {
         transform.position = pos;
         Vector3 eulerRot = rot.eulerAngles;
@@ -204,6 +252,58 @@ public class FPSController : PortalTraveller {
         transform.eulerAngles = Vector3.up * smoothYaw;
         velocity = toPortal.TransformVector (fromPortal.InverseTransformVector (velocity));
         Physics.SyncTransforms ();
+
+        StartCoroutine("TeleportSync");
+    }
+
+    private IEnumerator TeleportSync()
+    {
+        pv.RPC("RPC_Teleport", RpcTarget.All);
+        yield return new WaitForSeconds(0.4f);
+        pv.RPC("RPC_TeleportDone", RpcTarget.All);
+    }
+
+    [PunRPC]
+    void RPC_Teleport()
+    {
+        if(pv.IsMine)
+            return;
+        Debug.Log("Trying to disable " + transform.GetChild(0).gameObject.name);
+        transform.GetChild(0).gameObject.SetActive(false);
+        //transform.GetChild(0).gameObject.SetActive(true);
+    }
+
+    [PunRPC]
+    void RPC_TeleportDone()
+    {
+        if(pv.IsMine)
+            return;
+        Debug.Log("Trying to enable " + transform.GetChild(0).gameObject.name);
+        transform.GetChild(0).gameObject.SetActive(true);
+    }
+
+    public void TakeDamage(float damage)
+    {
+        pv.RPC("RPC_TakeDamage", RpcTarget.All, damage);
+    }
+
+    [PunRPC]
+    void RPC_TakeDamage(float damage)
+    {
+        if(!pv.IsMine)
+            return;
+
+        currenthealth -= damage;
+
+        if(currenthealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        playerManager.Die();
     }
 
 }
