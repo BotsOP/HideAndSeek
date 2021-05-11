@@ -47,12 +47,14 @@ public class FPSController : PortalTraveller, IDamagable {
 
 
     PlayerManager playerManager;
+    private GameManager gameManager;
     private PhotonView pv;
 
     void Start ()
     {
         pv = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)pv.InstantiationData[0]).GetComponent<PlayerManager>();
+        gameManager = FindObjectOfType<GameManager>();
 
         if(!pv.IsMine)
         {
@@ -90,7 +92,8 @@ public class FPSController : PortalTraveller, IDamagable {
         currenthealth = maxHealth;
     }
 
-    void Update () {
+    void Update () 
+    {
         if (Input.GetKeyDown (KeyCode.P)) {
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
@@ -105,7 +108,7 @@ public class FPSController : PortalTraveller, IDamagable {
         if (disabled) {
             return;
         }
-
+        
         Move();
         Look();
         Interact();
@@ -268,9 +271,7 @@ public class FPSController : PortalTraveller, IDamagable {
     {
         if(pv.IsMine)
             return;
-        Debug.Log("Trying to disable " + transform.GetChild(0).gameObject.name);
         transform.GetChild(0).gameObject.SetActive(false);
-        //transform.GetChild(0).gameObject.SetActive(true);
     }
 
     [PunRPC]
@@ -278,7 +279,6 @@ public class FPSController : PortalTraveller, IDamagable {
     {
         if(pv.IsMine)
             return;
-        Debug.Log("Trying to enable " + transform.GetChild(0).gameObject.name);
         transform.GetChild(0).gameObject.SetActive(true);
     }
 
@@ -295,15 +295,25 @@ public class FPSController : PortalTraveller, IDamagable {
 
         currenthealth -= damage;
 
-        if(currenthealth <= 0)
+        if(currenthealth <= 0 && !gameManager.nextSeekerFound)
         {
+            gameManager.nextSeeker = true;
+            pv.RPC("RPC_NextSeekerFound", RpcTarget.All);
+            
             Die();
         }
     }
 
+    [PunRPC]
+    private void RPC_NextSeekerFound()
+    {
+        gameManager.nextSeekerFound = true;
+        gameManager.UpdatePlayerCount(true);
+    }
+
     private void Die()
     {
-        playerManager.Die();
+        playerManager.Die(false);
     }
 
 }

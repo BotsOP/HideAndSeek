@@ -10,7 +10,6 @@ public class PortalManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log("Setting up portals");
         StartCoroutine("DelayPortals");
         StartCoroutine("TurnOffPortals");
     }

@@ -12,7 +12,9 @@ public class RoomManager : MonoBehaviourPunCallbacks, IPunObservable
     public static RoomManager Instance;
     public int selectedCharacter;
     public int time;
+    public int startTime;
     private bool inGame;
+    public GameObject PlayerManager;
     private void Awake()
     {
         if (Instance)
@@ -28,13 +30,11 @@ public class RoomManager : MonoBehaviourPunCallbacks, IPunObservable
     {
         if (PlayerPrefs.HasKey("MyCharacter"))
         {
-            Debug.Log("Already has mycharacter pref");
             selectedCharacter = 0;
             PlayerPrefs.SetInt("MyCharacter", selectedCharacter);
         }
         else
         {
-            Debug.Log("doesnt have mycharacter pref");
             selectedCharacter = 0;
             PlayerPrefs.SetInt("MyCharacter", selectedCharacter);
         }
@@ -54,13 +54,25 @@ public class RoomManager : MonoBehaviourPunCallbacks, IPunObservable
 
     void OnSceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
     {
-        Debug.Log("test");
         if (scene.buildIndex == 1)
         {
-            time = (int)Time.time;
+            SetTime();
+            StartCoroutine("DelayLoadScene");
             inGame = true;
-            PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
         }
+    }
+
+    private IEnumerator DelayLoadScene()
+    {
+        //Delaying the player instantiation a little bit to stop weird desync issues
+        yield return new WaitForSeconds(0.2f);
+        PlayerManager = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
+    }
+
+    public void SetTime()
+    {
+        time = (int)Time.time;
+        startTime = time;
     }
 
     private void Update()
@@ -69,19 +81,19 @@ public class RoomManager : MonoBehaviourPunCallbacks, IPunObservable
         {
             time = (int)Time.time;
         }
-        Debug.Log(time);
     }
     
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        Debug.Log("Streaming");
         if (stream.IsWriting && PhotonNetwork.IsMasterClient && inGame)
         {
             stream.SendNext(time);
+            stream.SendNext(startTime);
         }
         else if (stream.IsReading && !PhotonNetwork.IsMasterClient && inGame)
         {
             time = (int)stream.ReceiveNext();
+            startTime = (int)stream.ReceiveNext();
         }
     }
 }
