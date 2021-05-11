@@ -10,6 +10,8 @@ using Hashtable = ExitGames.Client.Photon.Hashtable;
 public class PlayerListItem : MonoBehaviourPunCallbacks
 {
     [SerializeField] private TMP_Text text;
+    public Color colorHider;
+    public Color colorSeeker;
     private Player player;
     
     public void SetUp(Player _player)
@@ -32,16 +34,17 @@ public class PlayerListItem : MonoBehaviourPunCallbacks
 
     private void SetPlayerText(Player player)
     {
+        text.text = player.NickName;
         if (player.CustomProperties.ContainsKey("Team"))
         {
             if ((int)player.CustomProperties["Team"] == 0)
             {
-                text.color = Color.blue;
+                text.color = colorHider;
                 return;
             }
-            text.color = Color.red;
+            text.color = colorSeeker;
+
         }
-        text.text = player.NickName;
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)

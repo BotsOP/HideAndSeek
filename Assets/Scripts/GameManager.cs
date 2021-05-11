@@ -7,6 +7,7 @@ using TMPro;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
+
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public int matchTime;
@@ -25,6 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         roomManager = FindObjectOfType<RoomManager>();
         pv = GetComponent<PhotonView>();
         PhotonNetwork.AutomaticallySyncScene = true;
+        playersAlive = PhotonNetwork.CurrentRoom.PlayerCount;
     }
 
     private void Update()
@@ -34,20 +36,22 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void UpdatePlayerCount(bool playerDied)
     {
-        if(playerDied)
+        if (playerDied)
             playersDead++;
+        else
+            playersDead--;
         
-        int playerCount = PhotonNetwork.CountOfPlayers - playersDead;
+        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount - playersDead;
         playersAlive = playerCount;
         if (playerCount == 1)
         {
             StartCoroutine("StartNextRound");
         }
     }
-    
+
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        UpdatePlayerCount(false);
+        UpdatePlayerCount(FindObjectOfType<FPSController>());
     }
 
     private IEnumerator StartNextRound()

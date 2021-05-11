@@ -167,12 +167,12 @@ public class Launcher : MonoBehaviourPunCallbacks
         if (whichCharacter == 0)
         {
             teamText.text = "Team hiders";
-            teamText.color = Color.blue;
+            teamText.color = new Color(0.4292453f, 0.9004994f, 1);
         }
         else if (whichCharacter == 1)
         {
             teamText.text = "Team seekers";
-            teamText.color = Color.red;
+            teamText.color = new Color(1, 0.3349057f, 0.3349057f);
         }
     }
 }

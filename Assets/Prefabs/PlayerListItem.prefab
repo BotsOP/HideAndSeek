@@ -148,3 +148,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 918682553924445139}
+  colorHider: {r: 0.4292453, g: 0.9004994, b: 1, a: 1}
+  colorSeeker: {r: 1, g: 0.33490568, b: 0.33490568, a: 1}
