@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         
         int playerCount = PhotonNetwork.CurrentRoom.PlayerCount - playersDead;
         playersAlive = playerCount;
-        if (playerCount == 1)
+        if (playerCount == 1 && PhotonNetwork.IsMasterClient)
         {
             StartCoroutine("StartNextRound");
         }

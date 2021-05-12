@@ -65,7 +65,7 @@ public class RoomManager : MonoBehaviourPunCallbacks, IPunObservable
     private IEnumerator DelayLoadScene()
     {
         //Delaying the player instantiation a little bit to stop weird desync issues
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.5f);
         PlayerManager = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerManager"), Vector3.zero, Quaternion.identity);
     }
 

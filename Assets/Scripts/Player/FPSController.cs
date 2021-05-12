@@ -21,6 +21,7 @@ public class FPSController : PortalTraveller, IDamagable {
     public Vector2 pitchMinMax = new Vector2 (-40, 85);
     public float rotationSmoothTime = 0.1f;
     public bool isSeeker = false;
+    public bool hitPunch;
 
     CharacterController controller;
     public Transform camTransform;
@@ -43,27 +44,37 @@ public class FPSController : PortalTraveller, IDamagable {
     private bool isCrouching;
     float fireRate = 0.9f;
     float nextFire;
+    private bool hasSetCrouch;
+    
 
 
     private PlayerManager playerManager;
     private GameManager gameManager;
     private PhotonView pv;
+    private CrouchCheck crouchCheck;
+    private AudioSource audio;
+    private PlayerSounds playerSounds;
+    private CapsuleCollider cc;
 
     void Start ()
     {
+        gameManager = FindObjectOfType<GameManager>();
         pv = GetComponent<PhotonView>();
         playerManager = PhotonView.Find((int)pv.InstantiationData[0]).GetComponent<PlayerManager>();
-        gameManager = FindObjectOfType<GameManager>();
-
+        
         if(!pv.IsMine)
         {
             Destroy(GetComponent<CharacterController>());
-            CapsuleCollider cc = gameObject.AddComponent(typeof(CapsuleCollider)) as CapsuleCollider;
+            cc = gameObject.AddComponent(typeof(CapsuleCollider)) as CapsuleCollider;
             cc.height = 1.85f;
             cc.center = new Vector3(0, -0.1f, 0);
             return;
         }
-
+        
+        crouchCheck = transform.GetChild(2).GetComponent<CrouchCheck>();
+        audio = GetComponent<AudioSource>();
+        playerSounds = GetComponent<PlayerSounds>();
+        
         Camera.main.transform.SetParent(camTransform);
         Camera.main.transform.localPosition = Vector3.zero;
         camTransform.localPosition = new Vector3(0, 0.662f, 0);
@@ -133,21 +144,27 @@ public class FPSController : PortalTraveller, IDamagable {
 
         Vector3 inputDir = new Vector3 (input.x, 0, input.y).normalized;
         Vector3 worldInputDir = transform.TransformDirection (inputDir);
-        
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+
+        if (Input.GetKey(KeyCode.LeftControl) && !hasSetCrouch)
         {
+            Debug.Log("crouching");
             isCrouching = true;
             controller.center = new Vector3(0, -.3f, 0);
             controller.height = 1.3f;
             camTransform.localPosition = new Vector3(0, 0.22f, 0);
+            pv.RPC("RPC_Crouching", RpcTarget.Others);
+            hasSetCrouch = true;
         }
         
-        if (Input.GetKeyUp(KeyCode.LeftControl))
+        if (!Input.GetKey(KeyCode.LeftControl) && !crouchCheck.shouldCrouch && hasSetCrouch)
         {
+            Debug.Log("not crouching");
             isCrouching = false;
             controller.center = Vector3.zero;
             controller.height = 2;
             camTransform.localPosition = new Vector3(0, 0.662f, 0);
+            pv.RPC("RPC_DoneCrouching", RpcTarget.Others);
+            hasSetCrouch = false;
         }
 
         float currentSpeed = walkSpeed;
@@ -194,6 +211,22 @@ public class FPSController : PortalTraveller, IDamagable {
         }
     }
 
+    [PunRPC]
+    private void RPC_Crouching()
+    {
+        cc.center = new Vector3(0, -.3f, 0);
+        cc.height = 1.3f;
+        camTransform.localPosition = new Vector3(0, 0.22f, 0);
+    }
+    
+    [PunRPC]
+    private void RPC_DoneCrouching()
+    {
+        cc.center = Vector3.zero;
+        cc.height = 2;
+        camTransform.localPosition = new Vector3(0, 0.662f, 0);
+    }
+
     private void Look()
     {
         float mX = Input.GetAxisRaw ("Mouse X");
@@ -220,14 +253,22 @@ public class FPSController : PortalTraveller, IDamagable {
     {
         if(Input.GetMouseButton(0) && Time.time > nextFire)
         {        
+            hitPunch = false;
             nextFire = Time.time + fireRate;
             StartCoroutine("Punch");
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 2f)) 
             {
-                hit.transform.gameObject.GetComponent<IDamagable>()?.TakeDamage(30);
+                if (hit.transform.gameObject.GetComponent<IDamagable>() != null)
+                {
+                    audio.PlayOneShot(playerSounds.hitPunch);
+                    return;
+                }
+                audio.PlayOneShot(playerSounds.missedPunch);
+                return;
             }
+            audio.PlayOneShot(playerSounds.missedPunch);
         }
     }
 
@@ -304,7 +345,8 @@ public class FPSController : PortalTraveller, IDamagable {
                 gameManager.nextSeeker = true;
             }
             pv.RPC("RPC_NextSeekerFound", RpcTarget.All);
-            Camera.main.gameObject.AddComponent<Observer>();
+            pv.RPC("RPC_NextSpectator", RpcTarget.Others);
+            //Camera.main.gameObject.AddComponent<Observer>();
             Die();
         }
     }
@@ -314,6 +356,19 @@ public class FPSController : PortalTraveller, IDamagable {
     {
         gameManager.nextSeekerFound = true;
         gameManager.UpdatePlayerCount(true);
+    }
+
+    [PunRPC]
+    private void RPC_NextSpectator()
+    {
+        if (transform.GetChild(0).transform.childCount > 0)
+        {
+            transform.GetChild(0).transform.GetChild(0).GetComponent<Observer>().GoNextPlayer();
+        }
+        if (FindObjectOfType<Observer>() != null)
+        {
+            FindObjectOfType<Observer>().alivePlayers.Remove(gameObject);
+        }
     }
 
     private void Die()

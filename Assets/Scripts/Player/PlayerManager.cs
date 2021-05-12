@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Random = UnityEngine.Random;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -24,7 +25,12 @@ public class PlayerManager : MonoBehaviour
 
     void CreateController()
     {
-        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), Vector3.up, Quaternion.identity, 0, new object[] { pv.ViewID });
+        controller = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "PlayerController"), GetRandomSpawn(), Quaternion.identity, 0, new object[] { pv.ViewID });
+    }
+
+    private Vector3 GetRandomSpawn()
+    {
+        return new Vector3(Random.Range(-5f, 5f), 1, Random.Range(-5f, 5f));
     }
 
     public void Die(bool respawn)

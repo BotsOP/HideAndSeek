@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Pun;
 using UnityEngine;
 
 public class EHidingSpot : MonoBehaviour, IInteractable
@@ -11,8 +12,13 @@ public class EHidingSpot : MonoBehaviour, IInteractable
     private Vector3 originalPosition;
     private bool goToTarget;
     private bool goToOriginal;
+
+    private AudioSource audio;
+    private PhotonView pv;
     private void Awake()
     {
+        pv = GetComponent<PhotonView>();
+        audio = GetComponent<AudioSource>();
         targetTransform.gameObject.SetActive(false);
         originalPosition = transform.position;
     }
@@ -20,6 +26,7 @@ public class EHidingSpot : MonoBehaviour, IInteractable
     {
         if (transform.position == originalPosition)
         {
+            pv.RPC("RPC_PlaySound", RpcTarget.All);
             goToTarget = true;
         }
     }
@@ -51,6 +58,13 @@ public class EHidingSpot : MonoBehaviour, IInteractable
     private IEnumerator GoBackToOriginal()
     {
         yield return new WaitForSeconds(timeRemainOpen);
+        pv.RPC("RPC_PlaySound", RpcTarget.All);
         goToOriginal = true;
+    }
+
+    [PunRPC]
+    private void RPC_PlaySound()
+    {
+        audio.Play();
     }
 }
