@@ -13,11 +13,12 @@ public class PlayerSounds : MonoBehaviour
     public AudioClip fallSound;
     private int flip;
     private bool hasGrounded;
+    private bool isRunning;
     
-    private FPSController player;
     private CharacterController controller;
     private AudioSource audioSource;
     private PhotonView pv;
+    private FPSController player;
 
     private void Start()
     {
@@ -45,43 +46,39 @@ public class PlayerSounds : MonoBehaviour
 
     private void Update()
     {
-        if (controller.isGrounded && hasGrounded)
+        if (!pv.IsMine)
+            return;
+        
+        if (player.isGrounded && hasGrounded)
         {
             pv.RPC("RPC_FallSound", RpcTarget.All);
             hasGrounded = false;
         }
-        if (!controller.isGrounded)
+        if (!player.isGrounded && !isRunning)
         {
-            hasGrounded = true;
+            Debug.Log(player.isGrounded);
+            StartCoroutine("HasGrounded");
         }
+    }
+
+    private IEnumerator HasGrounded()
+    {
+        isRunning = true;
+        yield return new WaitForSeconds(0.4f);
+        if (!player.isGrounded)
+            hasGrounded = true;
+        isRunning = false;
     }
     
     [PunRPC]
     private void RPC_FallSound()
     {
-        audioSource.PlayOneShot(fallSound);
+        audioSource.PlayOneShot(RandomAudioClip());
     }
 
-    //Could use animation event to check if the punch hit something
-    private void PunchSound()
+    public void SoundPunch(bool didHit)
     {
-        if(!pv.IsMine)
-            return;
-        
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out hit, 2f)) 
-        {
-            if (hit.transform.gameObject.GetComponent<IDamagable>() != null)
-            {
-                pv.RPC("RPC_Punch", RpcTarget.Others, true);
-                hit.transform.gameObject.GetComponent<IDamagable>().TakeDamage(30);
-                return;
-            }
-            pv.RPC("RPC_Punch", RpcTarget.Others, false);
-            return;
-        }
-        pv.RPC("RPC_Punch", RpcTarget.Others, false);
+        pv.RPC("RPC_Punch", RpcTarget.All, didHit);
     }
     
     [PunRPC]

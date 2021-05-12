@@ -12,7 +12,6 @@ public class FPSController : PortalTraveller, IDamagable {
     public float jumpForce = 8;
     public float gravity = 18;
     public Animator animator;
-    public GameObject avatar;
     public float maxHealth;
     public float currenthealth;
 
@@ -20,8 +19,8 @@ public class FPSController : PortalTraveller, IDamagable {
     public float mouseSensitivity = 10;
     public Vector2 pitchMinMax = new Vector2 (-40, 85);
     public float rotationSmoothTime = 0.1f;
-    public bool isSeeker = false;
-    public bool hitPunch;
+    public bool isSeeker;
+    public bool isGrounded;
 
     CharacterController controller;
     public Transform camTransform;
@@ -46,8 +45,6 @@ public class FPSController : PortalTraveller, IDamagable {
     float nextFire;
     private bool hasSetCrouch;
     
-
-
     private PlayerManager playerManager;
     private GameManager gameManager;
     private PhotonView pv;
@@ -55,6 +52,7 @@ public class FPSController : PortalTraveller, IDamagable {
     private AudioSource audio;
     private PlayerSounds playerSounds;
     private CapsuleCollider cc;
+    private HealthBar healthBar;
 
     void Start ()
     {
@@ -74,6 +72,7 @@ public class FPSController : PortalTraveller, IDamagable {
         crouchCheck = transform.GetChild(2).GetComponent<CrouchCheck>();
         audio = GetComponent<AudioSource>();
         playerSounds = GetComponent<PlayerSounds>();
+        healthBar = FindObjectOfType<HealthBar>();
         
         Camera.main.transform.SetParent(camTransform);
         Camera.main.transform.localPosition = Vector3.zero;
@@ -95,12 +94,14 @@ public class FPSController : PortalTraveller, IDamagable {
         if(isSeeker)
         {
             maxHealth = 99999;
-            currenthealth = 9999;
+            currenthealth = maxHealth;
             runSpeed = 10;
+            healthBar.SetMaxHealth((int)currenthealth);
             return;
         }
 
-        currenthealth = 100;
+        currenthealth = maxHealth;
+        healthBar.SetMaxHealth((int)currenthealth);
     }
 
     void Update () 
@@ -147,9 +148,8 @@ public class FPSController : PortalTraveller, IDamagable {
 
         if (Input.GetKey(KeyCode.LeftControl) && !hasSetCrouch)
         {
-            Debug.Log("crouching");
             isCrouching = true;
-            controller.center = new Vector3(0, -.3f, 0);
+            controller.center = new Vector3(0, -.35f, 0);
             controller.height = 1.3f;
             camTransform.localPosition = new Vector3(0, 0.22f, 0);
             pv.RPC("RPC_Crouching", RpcTarget.Others);
@@ -158,7 +158,6 @@ public class FPSController : PortalTraveller, IDamagable {
         
         if (!Input.GetKey(KeyCode.LeftControl) && !crouchCheck.shouldCrouch && hasSetCrouch)
         {
-            Debug.Log("not crouching");
             isCrouching = false;
             controller.center = Vector3.zero;
             controller.height = 2;
@@ -193,7 +192,6 @@ public class FPSController : PortalTraveller, IDamagable {
 
         verticalVelocity -= gravity * Time.deltaTime;
         velocity = new Vector3 (velocity.x, verticalVelocity, velocity.z);
-        //Debug.Log(velocity);
 
         var flags = controller.Move (velocity * Time.deltaTime);
         if (flags == CollisionFlags.Below) {
@@ -214,7 +212,7 @@ public class FPSController : PortalTraveller, IDamagable {
     [PunRPC]
     private void RPC_Crouching()
     {
-        cc.center = new Vector3(0, -.3f, 0);
+        cc.center = new Vector3(0, -.35f, 0);
         cc.height = 1.3f;
         camTransform.localPosition = new Vector3(0, 0.22f, 0);
     }
@@ -253,7 +251,6 @@ public class FPSController : PortalTraveller, IDamagable {
     {
         if(Input.GetMouseButton(0) && Time.time > nextFire)
         {        
-            hitPunch = false;
             nextFire = Time.time + fireRate;
             StartCoroutine("Punch");
             RaycastHit hit;
@@ -262,13 +259,14 @@ public class FPSController : PortalTraveller, IDamagable {
             {
                 if (hit.transform.gameObject.GetComponent<IDamagable>() != null)
                 {
-                    audio.PlayOneShot(playerSounds.hitPunch);
+                    hit.transform.gameObject.GetComponent<IDamagable>().TakeDamage(30);
+                    playerSounds.SoundPunch(true);
                     return;
                 }
-                audio.PlayOneShot(playerSounds.missedPunch);
+                playerSounds.SoundPunch(true);
                 return;
             }
-            audio.PlayOneShot(playerSounds.missedPunch);
+            playerSounds.SoundPunch(false);
         }
     }
 
@@ -337,7 +335,8 @@ public class FPSController : PortalTraveller, IDamagable {
             return;
 
         currenthealth -= damage;
-
+        healthBar.SetHealth((int)currenthealth);
+        
         if(currenthealth <= 0)
         {
             if (!gameManager.nextSeekerFound)
