@@ -58,3 +58,7 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+Assets/PolygonDungeonMap/Scene/Dungeon_Map_Demo.unity
+Assets/PolygonDungeonMap/Scene/Dungeon_Map_Demo.unity.meta
+Assets/Scenes/DungeonMap.unity
+Assets/Scenes/DungeonMap.unity.meta
