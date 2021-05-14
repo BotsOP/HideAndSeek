@@ -22,6 +22,9 @@ public class PortalManager : MonoBehaviour
 
     public void SetUpPortals()
     {
+        if (portals.Length == 0)
+            return;
+        
         MainCamera mainCamera = FindObjectOfType<MainCamera>();
         mainCamera.portals = new Portal[portals.Length];
         
