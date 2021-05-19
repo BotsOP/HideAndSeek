@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public int matchTime;
     public TMP_Text timeText;
+    public TMP_Text fpsText;
     private int currentMatchTime;
     private PhotonView pv;
     public bool nextSeeker;
@@ -32,6 +33,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private void Update()
     {
         SetTime();
+        int current = (int)(1f / Time.unscaledDeltaTime);
+        fpsText.text = current.ToString();
     }
 
     public void UpdatePlayerCount(bool playerDied)
