@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 415500}
   - component: {fileID: 3336852}
   - component: {fileID: 2378706}
+  - component: {fileID: 1555940899387060563}
   m_Layer: 0
   m_Name: SM_Prop_Trap_Pit_Door_R
   m_TagString: Untagged
@@ -81,6 +82,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1555940899387060563
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155756}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.3955138, y: 0.36661363, z: 4.770358}
+  m_Center: {x: -1.1977566, y: 0.18330684, z: -0.000011444092}
 --- !u!1 &169186
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,6 +106,7 @@ GameObject:
   - component: {fileID: 440692}
   - component: {fileID: 3347542}
   - component: {fileID: 2375616}
+  - component: {fileID: 3340515513821423418}
   m_Layer: 0
   m_Name: SM_Prop_Trap_Pit_Door_L
   m_TagString: Untagged
@@ -162,6 +177,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &3340515513821423418
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169186}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.3688219, y: 0.36661363, z: 4.770358}
+  m_Center: {x: 1.1844109, y: 0.18330684, z: -0.0000076293945}
 --- !u!1 &189660
 GameObject:
   m_ObjectHideFlags: 0
@@ -178,7 +206,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 16
   m_IsActive: 1
 --- !u!4 &455900
 Transform:

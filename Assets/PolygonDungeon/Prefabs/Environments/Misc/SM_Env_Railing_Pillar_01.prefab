@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 400220}
   - component: {fileID: 3306784}
   - component: {fileID: 2328260}
+  - component: {fileID: 86627847567093733}
   m_Layer: 0
   m_Name: SM_Env_Railing_Pillar_01
   m_TagString: Untagged
@@ -81,3 +82,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &86627847567093733
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 132400}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6313362, y: 1.2196859, z: 0.63134}
+  m_Center: {x: 0.0000019073486, y: 0.60984296, z: 0.0000038146973}

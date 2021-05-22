@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 431570}
   - component: {fileID: 3390276}
   - component: {fileID: 2315850}
+  - component: {fileID: 4634834228751997518}
   m_Layer: 0
   m_Name: SM_Prop_Tech_Lever_01
   m_TagString: Untagged
@@ -81,3 +82,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4634834228751997518
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 192424}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.43793488, y: 0.4947281, z: 0.19492325}
+  m_Center: {x: -0.002686888, y: 0.24736404, z: -0.11462982}

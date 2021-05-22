@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 404526}
   - component: {fileID: 3359784}
   - component: {fileID: 2312264}
+  - component: {fileID: 5229845764793906344}
   m_Layer: 0
   m_Name: SM_Prop_Bricks_02
   m_TagString: Untagged
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &5229845764793906344
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 162626}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 1c29b6574f450644cb599051fa7d9cfa, type: 3}

@@ -21,6 +21,7 @@ public class FPSController : PortalTraveller, IDamagable {
     public float rotationSmoothTime = 0.1f;
     public bool isSeeker;
     public bool isGrounded;
+    public bool onLadder;
 
     CharacterController controller;
     public Transform camTransform;
@@ -31,7 +32,7 @@ public class FPSController : PortalTraveller, IDamagable {
 
     float yawSmoothV;
     float pitchSmoothV;
-    float verticalVelocity;
+    public float verticalVelocity;
     Vector3 velocity;
     Vector3 smoothV;
     Vector3 rotationSmoothVelocity;
@@ -141,7 +142,11 @@ public class FPSController : PortalTraveller, IDamagable {
 
     private void Move()
     {
-        Vector2 input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
+        Vector2 input = Vector2.zero;
+        if (!onLadder)
+        {
+            input = new Vector2 (Input.GetAxisRaw ("Horizontal"), Input.GetAxisRaw ("Vertical"));
+        }
 
         Vector3 inputDir = new Vector3 (input.x, 0, input.y).normalized;
         Vector3 worldInputDir = transform.TransformDirection (inputDir);
@@ -190,7 +195,9 @@ public class FPSController : PortalTraveller, IDamagable {
             animator.SetBool("isWalking", false);
         }
 
-        verticalVelocity -= gravity * Time.deltaTime;
+        if (!onLadder)
+            verticalVelocity -= gravity * Time.deltaTime;
+
         velocity = new Vector3 (velocity.x, verticalVelocity, velocity.z);
 
         var flags = controller.Move (velocity * Time.deltaTime);
@@ -202,7 +209,7 @@ public class FPSController : PortalTraveller, IDamagable {
 
         if (Input.GetKeyDown (KeyCode.Space)) {
             float timeSinceLastTouchedGround = Time.time - lastGroundedTime;
-            if (controller.isGrounded || (!jumping && timeSinceLastTouchedGround < 0.15f)) {
+            if (isGrounded || (!jumping && timeSinceLastTouchedGround < 0.15f)) {
                 jumping = true;
                 verticalVelocity = jumpForce;
             }

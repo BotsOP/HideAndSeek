@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 459324}
   - component: {fileID: 3373618}
   - component: {fileID: 2333968}
+  - component: {fileID: 1821488526009812861}
   m_Layer: 0
   m_Name: SM_Env_Basement_Ceiling_01
   m_TagString: Untagged
@@ -81,3 +82,16 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1821488526009812861
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 173574}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.000001, y: 0.19268036, z: 5.000001}
+  m_Center: {x: -2.4999967, y: -0.09633827, z: 2.5000112}

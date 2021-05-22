@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 483838}
   - component: {fileID: 3368996}
   - component: {fileID: 2395020}
+  - component: {fileID: 313793350875956063}
   m_Layer: 0
   m_Name: SM_Env_Wall_Pillar_Large_Round_01
   m_TagString: Untagged
@@ -81,3 +82,17 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &313793350875956063
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 179770}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4300000, guid: 9ac735398bb7788449e7b3dff98044ae, type: 3}
