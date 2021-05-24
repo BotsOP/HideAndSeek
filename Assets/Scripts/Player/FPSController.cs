@@ -55,7 +55,7 @@ public class FPSController : PortalTraveller, IDamagable {
     private CapsuleCollider cc;
     private HealthBar healthBar;
 
-    void Start ()
+    void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         pv = GetComponent<PhotonView>();
@@ -96,7 +96,7 @@ public class FPSController : PortalTraveller, IDamagable {
         {
             maxHealth = 99999;
             currenthealth = maxHealth;
-            runSpeed = 10;
+            runSpeed = 6.06f;
             healthBar.SetMaxHealth((int)currenthealth);
             return;
         }
@@ -209,7 +209,7 @@ public class FPSController : PortalTraveller, IDamagable {
 
         if (Input.GetKeyDown (KeyCode.Space)) {
             float timeSinceLastTouchedGround = Time.time - lastGroundedTime;
-            if (isGrounded || (!jumping && timeSinceLastTouchedGround < 0.15f)) {
+            if (controller.isGrounded || (!jumping && timeSinceLastTouchedGround < 0.15f)) {
                 jumping = true;
                 verticalVelocity = jumpForce;
             }
@@ -285,7 +285,7 @@ public class FPSController : PortalTraveller, IDamagable {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         
             int layerMask = 1 << 7;
-            if (Physics.Raycast(ray, out hit, 2f, layerMask)) {
+            if (Physics.Raycast(ray, out hit, 5f, layerMask)) {
                 if (hit.transform.gameObject.GetComponent<IInteractable>() != null)
                 {
                     hit.transform.gameObject.GetComponent<IInteractable>().Interact();
@@ -304,6 +304,11 @@ public class FPSController : PortalTraveller, IDamagable {
         velocity = toPortal.TransformVector (fromPortal.InverseTransformVector (velocity));
         Physics.SyncTransforms ();
 
+        TeleportSyncer();
+    }
+
+    public void TeleportSyncer()
+    {
         StartCoroutine("TeleportSync");
     }
 

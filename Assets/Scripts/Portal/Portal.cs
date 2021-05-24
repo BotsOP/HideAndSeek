@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour {
     [Header ("Main Settings")]
+    public bool portalOff = true;
     public Portal linkedPortal;
     public MeshRenderer screen;
     public int recursionLimit = 5;
@@ -73,10 +74,16 @@ public class Portal : MonoBehaviour {
     // Called after PrePortalRender, and before PostPortalRender
     public void Render () {
 
+        if(portalOff)
+            return;
+
+        Debug.Log(gameObject.name);
+
         // Skip rendering the view from this portal if player is not looking at the linked portal
         if (!CameraUtility.VisibleFromCamera (linkedPortal.screen, playerCam)) {
             return;
         }
+        
 
         CreateViewTexture ();
 
