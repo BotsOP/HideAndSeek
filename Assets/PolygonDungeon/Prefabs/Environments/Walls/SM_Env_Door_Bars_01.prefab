@@ -17,12 +17,13 @@ GameObject:
   - component: {fileID: 9055239113384443556}
   - component: {fileID: 2747024194660104585}
   - component: {fileID: 5207237758493794580}
+  - component: {fileID: 7488013618977092791}
   m_Layer: 7
   m_Name: SM_Env_Door_Bars_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 16
+  m_StaticEditorFlags: 18
   m_IsActive: 1
 --- !u!4 &485512
 Transform:
@@ -139,7 +140,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 9055239113384443556}
-  sceneViewId: 60
+  - {fileID: 7488013618977092791}
+  sceneViewId: 68
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &9055239113384443556
@@ -271,3 +273,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &7488013618977092791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 195692}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

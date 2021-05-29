@@ -17,12 +17,13 @@ GameObject:
   - component: {fileID: 8719747485718263060}
   - component: {fileID: 1827759797005203960}
   - component: {fileID: 8443802502162299191}
+  - component: {fileID: 846415621643985490}
   m_Layer: 7
   m_Name: SM_Env_Door_05
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 16
   m_IsActive: 1
 --- !u!4 &488036
 Transform:
@@ -33,7 +34,7 @@ Transform:
   m_GameObject: {fileID: 111754}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0917999, y: 0.99970657, z: 1.0917999}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -141,7 +142,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 7982874175208808594}
-  sceneViewId: 0
+  - {fileID: 846415621643985490}
+  sceneViewId: 9
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!95 &8719747485718263060
@@ -271,3 +273,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &846415621643985490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 111754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2315648}
   - component: {fileID: 19944248}
   - component: {fileID: 19845310}
+  - component: {fileID: 4807964444919230421}
   m_Layer: 0
   m_Name: SM_Prop_Candle_Chandelier_01_Preset
   m_TagString: Untagged
@@ -4843,3 +4844,16 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!65 &4807964444919230421
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100744}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0643768, y: 0.024280071, z: 1.1726303}
+  m_Center: {x: 0.0000009536743, y: -2.0673778, z: 0}

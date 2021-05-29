@@ -39,6 +39,7 @@ public class FPSController : PortalTraveller, IDamagable {
     Vector3 currentRotation;
 
     bool jumping;
+    public bool allowedToMove = true;
     float lastGroundedTime;
     bool disabled;
     private bool isCrouching;
@@ -74,6 +75,7 @@ public class FPSController : PortalTraveller, IDamagable {
         audio = GetComponent<AudioSource>();
         playerSounds = GetComponent<PlayerSounds>();
         healthBar = FindObjectOfType<HealthBar>();
+        gameObject.tag = "Player";
         
         Camera.main.transform.SetParent(camTransform);
         Camera.main.transform.localPosition = Vector3.zero;
@@ -96,8 +98,9 @@ public class FPSController : PortalTraveller, IDamagable {
         {
             maxHealth = 99999;
             currenthealth = maxHealth;
-            runSpeed = 6.06f;
+            runSpeed = 6.12f;
             healthBar.SetMaxHealth((int)currenthealth);
+            transform.position = new Vector3(27.5f, 1.5f, -7.5f);
             return;
         }
 
@@ -121,14 +124,18 @@ public class FPSController : PortalTraveller, IDamagable {
         if (disabled) {
             return;
         }
-        
-        Move();
-        Look();
-        Interact();
-        if(isSeeker)
+
+        if (allowedToMove)
         {
-            Shoot();
+            Move();
+            Look();
+            Interact();
+            if(isSeeker)
+            {
+                Shoot();
+            }
         }
+        
     }
 
     private IEnumerator Punch()
@@ -357,7 +364,7 @@ public class FPSController : PortalTraveller, IDamagable {
             }
             pv.RPC("RPC_NextSeekerFound", RpcTarget.All);
             pv.RPC("RPC_NextSpectator", RpcTarget.Others);
-            //Camera.main.gameObject.AddComponent<Observer>();
+            Camera.main.gameObject.AddComponent<Observer>();
             Die();
         }
     }

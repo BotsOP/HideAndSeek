@@ -11,6 +11,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public int matchTime;
+    public Door seekerDoor;
     public TMP_Text timeText;
     public TMP_Text fpsText;
     private int currentMatchTime;
@@ -19,6 +20,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public bool nextSeekerFound;
     public int playersDead;
     public int playersAlive;
+    private bool openedSeekerDoor;
+    private Transform playerTransform;
 
     private RoomManager roomManager;
 
@@ -28,6 +31,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         pv = GetComponent<PhotonView>();
         PhotonNetwork.AutomaticallySyncScene = true;
         playersAlive = PhotonNetwork.CurrentRoom.PlayerCount;
+        
     }
 
     private void Update()
@@ -54,6 +58,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
+        Debug.Log("player left room");
         UpdatePlayerCount(FindObjectOfType<FPSController>());
     }
 
@@ -63,16 +68,31 @@ public class GameManager : MonoBehaviourPunCallbacks
         NextRound();
     }
 
+    public void LeaveRoom()
+    {
+        PhotonNetwork.LeaveRoom();
+    }
+
     private void SetTime()
     {
         int time = roomManager.time - roomManager.startTime;
         int minutes = (matchTime - time) / 60;
         int seconds = (matchTime - time) % 60;
         timeText.text = minutes + ":" + seconds;
-        if (minutes == 0 && seconds == 0)
+        if (minutes == 12 && seconds == 0 && !openedSeekerDoor && PhotonNetwork.IsMasterClient)
         {
-            NextRound();
+            OpenSeekerDoor();
         }
+        if (minutes == 0 && seconds == 0 && PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine("StartNextRound");
+        }
+    }
+
+    private void OpenSeekerDoor()
+    {
+        seekerDoor.Interact();
+        openedSeekerDoor = true;
     }
 
     public void NextRound()

@@ -21,14 +21,13 @@ public class Door : MonoBehaviour, IInteractable
     public void Interact()
     {
         pv.RPC("RPC_PlaySound", RpcTarget.All);
-        open = !open;
-        animator.SetBool("DoorOpen", open);
-        //pv.RPC("RPC_PlaySound", RpcTarget.All);
     }
 
     [PunRPC]
     private void RPC_PlaySound()
     {
+        open = !open;
+        animator.SetBool("DoorOpen", open);
         audio.Play();
     }
 }

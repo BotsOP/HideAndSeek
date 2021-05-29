@@ -17,12 +17,13 @@ GameObject:
   - component: {fileID: 8863134307414320250}
   - component: {fileID: 8722472572728551717}
   - component: {fileID: 2739713197201402861}
+  - component: {fileID: 1758784960662887458}
   m_Layer: 7
   m_Name: SM_Env_DoorDouble_Round_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 18
+  m_StaticEditorFlags: 16
   m_IsActive: 1
 --- !u!4 &479156
 Transform:
@@ -141,7 +142,8 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 8863134307414320250}
-  sceneViewId: 52
+  - {fileID: 1758784960662887458}
+  sceneViewId: 56
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &8863134307414320250
@@ -275,3 +277,19 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: fdf82175223df9647b07741e2530e179, type: 3}
+--- !u!114 &1758784960662887458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 158966}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1

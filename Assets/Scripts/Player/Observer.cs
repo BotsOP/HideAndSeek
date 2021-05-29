@@ -30,7 +30,7 @@ public class Observer : MonoBehaviour
         
         transform.SetParent(alivePlayers[playerSpectateIndex].transform.GetChild(0));
         transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.Euler(90, 0, 0);
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
     void Update()
     {
@@ -52,7 +52,7 @@ public class Observer : MonoBehaviour
             
         transform.SetParent(alivePlayers[playerSpectateIndex].transform.GetChild(0));
         transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.Euler(90, 0, 0);
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
 
     public void GoPreviousPlayer()
@@ -63,6 +63,6 @@ public class Observer : MonoBehaviour
             
         transform.SetParent(alivePlayers[playerSpectateIndex].transform.GetChild(0));
         transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.Euler(90, 0, 0);
+        transform.localRotation = Quaternion.Euler(0, 0, 0);
     }
 }

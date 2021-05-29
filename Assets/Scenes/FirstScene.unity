@@ -446,8 +446,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -345.00006, y: 76}
-  m_SizeDelta: {x: 600, y: 93.134}
+  m_AnchoredPosition: {x: -252.00012, y: 76}
+  m_SizeDelta: {x: 426.637, y: 93.134}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &152001444
 MonoBehaviour:
@@ -582,7 +582,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -718, y: -359}
+  m_AnchoredPosition: {x: 329, y: 77.99994}
   m_SizeDelta: {x: 600, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &184104479
@@ -1960,8 +1960,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -345, y: 191}
-  m_SizeDelta: {x: 600, y: 70}
+  m_AnchoredPosition: {x: -252, y: 191}
+  m_SizeDelta: {x: 426.637, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &584125128
 MonoBehaviour:
@@ -2825,7 +2825,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 834314548}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1226285810}
+        m_TargetAssemblyTypeName: Launcher, Assembly-CSharp
+        m_MethodName: QuitGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &834314548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2900,7 +2912,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -718, y: -276}
+  m_AnchoredPosition: {x: 329, y: 161}
   m_SizeDelta: {x: 600, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &846103995
@@ -3368,10 +3380,10 @@ RectTransform:
   m_Father: {fileID: 1226285808}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1096813969
 MonoBehaviour:
@@ -4435,7 +4447,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -718, y: -190.69092}
+  m_AnchoredPosition: {x: 329, y: 246.30902}
   m_SizeDelta: {x: 600, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1367836873
@@ -4757,8 +4769,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -345, y: 294}
-  m_SizeDelta: {x: 600, y: 70}
+  m_AnchoredPosition: {x: -252, y: 294}
+  m_SizeDelta: {x: 426.637, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1566158980
 MonoBehaviour:
