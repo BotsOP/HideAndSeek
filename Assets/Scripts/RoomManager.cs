@@ -60,6 +60,10 @@ public class RoomManager : MonoBehaviourPunCallbacks, IPunObservable
             StartCoroutine("DelayLoadScene");
             inGame = true;
         }
+        if (scene.buildIndex == 0)
+        {
+            inGame = false;
+        }
     }
 
     private IEnumerator DelayLoadScene()

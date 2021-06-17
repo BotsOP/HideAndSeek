@@ -9,13 +9,13 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/FirstScene.unity
+    path: Assets/Scenes/Menu.unity
     guid: 5971caeba4b1e8b43a3e48f337a6b24c
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Scenes/GameScene.unity
+    path: 
     guid: 4149ddf19764319429da3b44ba93aa8a
   - enabled: 0
     path: Assets/Scenes/Demo.unity
@@ -23,4 +23,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DungeonMap.unity
     guid: 8b698c3eb45709d47ad8ad71907e6193
+  - enabled: 1
+    path: Assets/Scenes/Menu2.unity
+    guid: efb00e8066af6db48bbe193fd360d587
   m_configObjects: {}

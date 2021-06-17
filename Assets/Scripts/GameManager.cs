@@ -71,6 +71,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void LeaveRoom()
     {
         PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel(2);
     }
 
     private void SetTime()
